@@ -1,0 +1,477 @@
+One Way binding (or) Interpolation
+===================================
+
+import {Component} from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    Hello {{city}}, {{1+1}}
+  `,
+})
+export class AppComponent {
+  city ="San Francisco"
+}
+
+
+
+Composing Components:
+=====================
+
+import {Component} from '@angular/core';
+
+@Component({
+  selector: 'app-user',
+  template: `
+    Username: {{ username }}
+  `,
+})
+export class UserComponent {
+  username = 'youngTech';
+}
+
+
+// accessing the data from app-user in app.component.ts
+
+@Component({
+  selector: 'app-root',
+  template: `<section><app-user /></section>`,
+  imports: [UserComponent],
+})
+export class AppComponent {}
+
+
+
+
+Control Flow in Components - @if
+================================
+Deciding what to display on the screen for a user is a common task in application development. Many times, the decision is made programmatically using conditions.
+
+@if(isLoggedIn){
+	<p> Welcome back, Friend! </P>
+}
+
+Ex: Check isServerRunning -> set as true. 
+@if and @else
+
+import {Component} from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+  @if(isServerRunning){
+    <span>Yes, the server is running</span>
+  }
+  @else{
+    <span>No, the server is not running</span>
+  }
+  `,
+})
+
+export class AppComponent {
+  // add the boolean property here
+  isServerRunning = true;
+}
+
+
+
+
+Control Flow in Components - @for
+=================================
+
+
+Often when building web applications, you need to repeat some code a specific number of times - for example, given an array of names, you may want to display each name in a <p> tag.
+
+
+@Component({
+  ...
+  template: `
+    @for (os of operatingSystems; track os.id) {
+      {{ os.name }}
+    }
+  `,
+})
+export class AppComponent {
+  operatingSystems = [{id: 'win', name: 'Windows'}, {id: 'osx', name: 'MacOS'}, {id: 'linux', name: 'Linux'}];
+}
+
+
+
+import {Component} from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    @for( user of users; track user.id){
+      <p>{{user.name}}</p>
+    }
+  `,
+})
+export class AppComponent {
+  users = [{id: 0, name: 'Sarah'}, {id: 1, name: 'Amy'}, {id: 2, name: 'Rachel'}, {id: 3, name: 'Jessica'}, {id: 4, name: 'Poornima'}];
+}
+
+
+
+
+Property Binding in Angular
+===========================
+
+Property binding in Angular enables you to set values for properties of HTML elements, Angular components and more.
+
+Ex: <img alt="pic" [src] ="img url">
+ 
+
+
+import {Component} from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  styleUrls: ['app.component.css'],
+  template: `
+    <div [contentEditable]="isEditable"></div>
+  `,
+})
+export class AppComponent {
+  isEditable = true;
+}
+
+
+
+
+
+Event Handling
+===============
+
+
+Event handling enables interactive features on web apps. It gives you the ability as a developer to respond to user actions like button presses, form submissions and more.
+
+
+@Component({
+    ...
+    template: `<button (click)="greet()">`
+})
+class AppComponent {
+    greet() {
+        console.log('Hello, there 👋');
+    }
+}
+
+
+
+
+
+
+import {Component} from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <section (mouseover)="onMouseOver()">
+      There's a secret message for you, hover to reveal:
+      {{ message }}
+    </section>
+  `,
+})
+export class AppComponent {
+  message = '';
+
+  onMouseOver() {
+    this.message = 'Way to go 🚀';
+  }
+}
+
+
+
+
+Component Communication - @Input
+================================
+
+Sometimes app development requires you to send data into a component. This data can be used to customize a component or perhaps send information from a parent component to a child component.
+
+
+
+user.component.ts
+------------------
+
+
+import {Component, Input} from '@angular/core';
+
+@Component({
+  selector: 'app-user',
+  template: `
+    <p>The user's name is {{name}}</p>
+  `,
+})
+export class UserComponent {
+  @Input() name ='';
+}
+
+
+app.component.ts
+-----------------
+
+import {Component} from '@angular/core';
+import {UserComponent} from './user.component';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <app-user name = "Simran"><app-user />
+  `,
+  imports: [UserComponent],
+})
+export class AppComponent {}
+
+
+
+
+Component Communication with - @Output
+======================================
+
+
+When working with components it may be required to notify other components that something has happened. Perhaps a button has been clicked, an item has been added/removed from a list or some other important update has occurred. In this scenario components need to communicate with parent components.
+
+
+o create the communication path from child to parent components, use the @Output decorator on a class property and assign it a value of type EventEmitter:
+
+
+@Component({...})
+class ChildComponent {
+    @Output() incrementCountEvent = new EventEmitter<number>();
+}
+
+
+Now the component can generate events that can be listened to by the parent component. Trigger events by calling the emit method:
+
+
+
+class ChildComponent {
+    ...
+    onClick() {
+        this.count++;
+        this.incrementCountEvent.emit(this.count);
+    }
+}
+
+
+
+
+child.component.ts
+-------------------
+
+import {Component, Output, EventEmitter} from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  styles: `.btn { padding: 5px; }`,
+  template: `
+    <button class="btn" (click)="addItem()">Add Item</button>
+  `,
+})
+export class ChildComponent {
+
+  @Output() addItemEvent = new EventEmitter<string>();
+  addItem() {
+    this.addItemEvent.emit('🐢');
+  }
+}
+
+
+app.component.ts
+----------------
+
+import {Component} from '@angular/core';
+import {ChildComponent} from './child.component';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <app-child (addItemEvent)="addItem($event)" />
+    <p>🐢 all the way down {{ items.length }}</p>
+  `,
+  imports: [ChildComponent],
+})
+export class AppComponent {
+  items = new Array();
+
+  addItem(item: string) {
+    this.items.push(item);
+  }
+}
+
+
+
+
+Deferrable Views
+================
+
+
+Sometimes in app development, you end up with a lot of components that you need to reference in your app, but some of those don't need to be loaded right away for various reasons.
+
+
+Maybe they are below the visible fold or are heavy components that aren't interacted with until later. In that case, we can load some of those resources later with deferrable views.
+
+
+
+@defer will load the comments component when the browser is idle.
+
+@defer {
+  <comments />
+}
+
+
+Add a @placeholder block to the @defer block. The @placeholder block is where you put html that will show before the deferred loading starts. The content in @placeholder blocks is eagerly loaded.
+
+
+@defer {
+  <comments />
+} @placeholder {
+  <p>Future comments</p>
+}
+
+
+
+Add a @loading block to the @defer block. The @loading block is where you put html that will show while the deferred content is actively being fetched, but hasn't finished yet. The content in @loading blocks is eagerly loaded.
+
+@defer {
+  <comments />
+} @placeholder {
+  <p>Future comments</p>
+} @loading {
+  <p>Loading comments...</p>
+}
+
+
+
+Both @placeholder and @loading sections have optional parameters to prevent flickering from occurring when loading happens quickly. @placeholder has minimum and @loading has minimum and after. Add a minimum duration to the @loading block so it will be rendered for at least 2 seconds.
+
+@defer {
+  <comments />
+} @placeholder {
+  <p>Future comments</p>
+} @loading (minimum 2s) {
+  <p>Loading comments...</p>
+}
+
+
+Deferrable views have a number of trigger options. Add a viewport trigger so the content will defer load once it enters the viewport.
+
+
+@defer (on viewport) {
+  <comments />
+}
+
+@defer: A built-in Angular control block to defer rendering of a component or template.
+
+(on viewport): A trigger that waits until the component is visible in the user's viewport before rendering.
+
+
+A viewport trigger is best used when you're deferring content that's far enough down the page that it needs to be scrolled to see. So let's add some content to our blog post. You can either write your own, or you can copy the content below and put it inside the <article> element.
+
+
+<article>
+  <p>Angular is my favorite framework, and this is why. Angular has the coolest deferrable view feature that makes defer loading content the easiest and most ergonomic it could possibly be. The Angular community is also filled with amazing contributors and experts that create excellent content. The community is welcoming and friendly, and it really is the best community out there.</p>
+</article>
+
+
+app.component.ts
+----------------
+
+import {Component} from '@angular/core';
+import {CommentsComponent} from './comments.component';
+
+import {Component} from '@angular/core';
+import {CommentsComponent} from './comments.component';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <div>
+      <h1>How I feel about Angular</h1>
+
+      <article>
+        <p>
+          Angular is my favorite framework, and this is why. Angular has the coolest deferrable view
+          feature that makes defer loading content the easiest and most ergonomic it could possibly
+          be. The Angular community is also filled with amazing contributors and experts that create
+          excellent content. The community is welcoming and friendly, and it really is the best
+          community out there.
+        </p>
+
+      </article>
+
+      @defer (on viewport) {
+      <comments />
+      } @placeholder {
+      <p>Future comments</p>
+      } @loading (minimum 2s) {
+      <p>Loading comments...</p>
+      }
+
+    </div>
+  `,
+  imports: [CommentsComponent],
+})
+export class AppComponent {}
+
+
+comments.component.ts
+---------------------
+
+import {Component} from '@angular/core';
+
+@Component({
+  selector: 'comments',
+  template: `
+    <ul>
+      <li>Building for the web is fantastic!</li>
+      <li>The new template syntax is great</li>
+      <li>I agree with the other comments!</li>
+    </ul>
+  `,
+})
+export class CommentsComponent {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
