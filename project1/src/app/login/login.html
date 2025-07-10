@@ -1,0 +1,35 @@
+<div class="login-container">
+  <h2>Login</h2>
+  <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+    <label>
+      Username:
+      <input
+        type="text"
+        name="username"
+        [(ngModel)]="username"
+        required
+        #usernameInput="ngModel"
+      />
+    </label>
+    <div *ngIf="usernameInput.invalid && usernameInput.touched" class="error">
+      Username is required.
+    </div>
+
+    <label>
+      Password:
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        required
+        minlength="6"
+        #passwordInput="ngModel"
+      />
+    </label>
+    <div *ngIf="passwordInput.invalid && passwordInput.touched" class="error">
+      Password is required and must be at least 6 characters.
+    </div>
+
+    <button type="submit" [disabled]="loginForm.invalid">Login</button>
+  </form>
+</div>

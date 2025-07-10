@@ -1,0 +1,55 @@
+<div *ngIf="!showAddForm" class="students-toolbar">
+  <h2>Students List</h2>
+  <button (click)="openAddForm()">Add Student</button>
+  <button (click)="exportToPDF()" style="margin-left: 16px;">Export to PDF</button>
+</div>
+
+<!-- Search -->
+<div *ngIf="!showAddForm" class="search-box">
+  <input
+    type="text"
+    placeholder="Search by name, email or course"
+    [(ngModel)]="filterText"
+  />
+</div>
+
+<!-- Students Table/List -->
+<table *ngIf="!showAddForm" class="students-table">
+  <thead>
+    <tr>
+      <th>ID</th><th>Name</th><th>Email</th><th>Course</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let student of filteredStudents">
+      <td>{{student.id}}</td>
+      <td>{{student.name}}</td>
+      <td>{{student.email}}</td>
+      <td>{{student.course}}</td>
+      <td><button (click)="deleteStudent(student.id)">Delete</button></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Add Student Form -->
+<div *ngIf="showAddForm" class="add-students-form">
+  <h2>Add New Student</h2>
+
+  <label>
+    Name:
+    <input [(ngModel)]="newStudent.name" />
+  </label>
+
+  <label>
+    Email:
+    <input [(ngModel)]="newStudent.email" type="email" />
+  </label>
+
+  <label>
+    Course:
+    <input [(ngModel)]="newStudent.course" />
+  </label>
+
+  <button (click)="saveStudent()">Save</button>
+  <button (click)="cancelAdd()">Cancel</button>
+</div>

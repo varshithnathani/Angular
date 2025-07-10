@@ -1,0 +1,40 @@
+.faculty-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.search-box {
+  margin-bottom: 15px;
+}
+
+.faculty-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.faculty-table th, .faculty-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.add-faculty-form {
+  max-width: 400px;
+  background: white;
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 0 10px #aaa;
+}
+
+.add-faculty-form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.add-faculty-form input {
+  width: 100%;
+  padding: 6px;
+  margin-top: 4px;
+}

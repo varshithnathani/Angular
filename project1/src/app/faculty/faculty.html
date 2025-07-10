@@ -1,0 +1,53 @@
+<div class="faculty-toolbar">
+  <h2>Faculty List</h2>
+  <button (click)="openAddForm()">Add Faculty</button>
+  <button (click)="exportToPDF()" style="margin-left: 16px;">Export to PDF</button>
+</div>
+
+
+<div *ngIf="!showAddForm" class="search-box">
+  <input
+    type="text"
+    placeholder="Search by name, email, department"
+    [(ngModel)]="filterText"
+  />
+</div>
+
+<table *ngIf="!showAddForm" class="faculty-table">
+  <thead>
+    <tr>
+      <th>ID</th><th>Name</th><th>Email</th><th>Department</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let faculty of filteredFaculty">
+      <td>{{faculty.id}}</td>
+      <td>{{faculty.name}}</td>
+      <td>{{faculty.email}}</td>
+      <td>{{faculty.department}}</td>
+      <td><button (click)="deleteFaculty(faculty.id)">Delete</button></td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="showAddForm" class="add-faculty-form">
+  <h2>Add New Faculty</h2>
+
+  <label>
+    Name:
+    <input [(ngModel)]="newFaculty.name" />
+  </label>
+
+  <label>
+    Email:
+    <input [(ngModel)]="newFaculty.email" type="email" />
+  </label>
+
+  <label>
+    Department:
+    <input [(ngModel)]="newFaculty.department" />
+  </label>
+
+  <button (click)="saveFaculty()">Save</button>
+  <button (click)="cancelAdd()">Cancel</button>
+</div>

@@ -1,0 +1,33 @@
+<!-- dashboard.html -->
+
+<div class="dashboard-wrapper">
+  <header class="dashboard-header">
+    <div class="logo">My College</div>
+    <nav class="header-nav">
+      <a href="#" class="header-link">Profile</a>
+      <a href="#" class="header-link" (click)="logout($event)">Logout</a>    </nav>
+  </header>
+
+  <div class="dashboard-body">
+    <mat-sidenav-container class="dashboard-container">
+      <mat-sidenav mode="side" opened>
+        <mat-nav-list>
+          <mat-list-item>
+            <a matLine routerLink="students" routerLinkActive="active-link">Students</a>
+          </mat-list-item>
+          <mat-list-item>
+            <a matLine routerLink="faculty" routerLinkActive="active-link">Faculty</a>
+          </mat-list-item>
+        </mat-nav-list>
+      </mat-sidenav>
+
+      <mat-sidenav-content>
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+
+  <footer class="dashboard-footer">
+    © 2025 My College. All rights reserved.
+  </footer>
+</div>
