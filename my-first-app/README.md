@@ -47,7 +47,7 @@ npm install
 ng serve
 
 ```
-
+--- 
 ## 📁 Project Strecture 
 
 project1/
@@ -66,7 +66,7 @@ project1/
 └── README.md
 
 
-
+---
 
 🧑‍💻 Author
 Varshith Nathani
